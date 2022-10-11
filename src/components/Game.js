@@ -16,6 +16,7 @@ function Game() {
     const [isViner, setIsViner] = useState(false)
     const [score, setScore] = useState(startScore)
 
+    // ищет победителя
     const checkIfIsWinner = useCallback((field) => {
         for (let i = 0; i < field.length; i++){
             for (let j = 0; j < field.length; j++){
