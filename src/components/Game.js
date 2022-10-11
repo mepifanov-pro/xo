@@ -61,6 +61,7 @@ function Game() {
     }
 
     const revansh = (pl) => {
+        // при реванше делаем рестарт
         setIsViner(false)
         setField(defaultField)
 
