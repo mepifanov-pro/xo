@@ -62,3 +62,14 @@ td {
 .row {
   display: flex;
 }
+
+
+
+.btn {
+  font-size: 30px;
+  color: rgb(151, 196, 168);
+  background-color: #222;
+  margin: 30px;
+  width: 200px;
+  height: 70px;
+}
