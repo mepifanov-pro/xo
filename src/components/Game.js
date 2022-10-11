@@ -43,7 +43,7 @@ function Game() {
         return false;
     }, [])
 
-
+    // обрабатываем клик по полю
     const changeClick = (rowId, colId) => {
         const newField = field.map(supField => ([...supField]));
 
