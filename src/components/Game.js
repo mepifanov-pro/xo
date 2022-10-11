@@ -14,6 +14,7 @@ function Game() {
     const [field, setField] = useState(defaultField)
     const [player, setPlauer] = useState(1)
     const [isViner, setIsViner] = useState(false)
+    const [isDraw, setIsDraw] = useState(false)
     const [score, setScore] = useState(startScore)
 
     // ищет победителя
@@ -40,6 +41,8 @@ function Game() {
             }
         }
 
+        setIsDraw(field.flat().every((cell) => cell !== null))
+
         return false;
     }, [])
 
@@ -62,8 +65,11 @@ function Game() {
 
     const revansh = (pl) => {
         // при реванше делаем рестарт
+        
+        setPlauer((player) => player === 1 ? 2 : 1)
         setIsViner(false)
         setField(defaultField)
+        setIsDraw(false)
 
         let newScore = score.map(supScore => ([...supScore]));
         
@@ -83,7 +89,18 @@ function Game() {
         <div className="tab">
             <div>
                 <h1>Счет: {score[0] + ' : ' + score[1]}</h1>
-                <h1>{isViner ? 'Выиграл' : 'Ходит'} игрок {player}</h1>
+
+                {isDraw && (
+                    <h1>Ничья</h1>
+                )}
+
+                {!isDraw && isViner && (
+                    <h1>Выиграл игрок {player}</h1>
+                )}
+
+                {!isDraw && !isViner && (
+                    <h1>Ходит игрок {player}</h1>
+                )}
             </div>
             <table className="table">
                 {field.map((subField, i) => (
@@ -101,7 +118,7 @@ function Game() {
                     </tr>
                 ))}
             </table>
-            {isViner ? <button className="btn" onClick={() => {revansh(player)}}>Играть еще</button> : ''}
+            {(isViner || isDraw) && <button className="btn" onClick={() => {revansh(player)}}>Играть еще</button>}
         </div>
     )
 }
