@@ -64,6 +64,7 @@ function Game() {
     }
 
     const revansh = (pl) => {
+        // при реванше делаем рестарт
         
         setPlauer((player) => player === 1 ? 2 : 1)
         setIsViner(false)
