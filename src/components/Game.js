@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import cn from 'classnames'
 
 const defaultField = [
@@ -7,10 +7,40 @@ const defaultField = [
     [null, null, null]
 ]
 
+const startScore = [0, 0];
+
+
 function Game() {
     const [field, setField] = useState(defaultField)
     const [player, setPlauer] = useState(1)
     const [isViner, setIsViner] = useState(false)
+    const [score, setScore] = useState(startScore)
+
+    const checkIfIsWinner = useCallback((field) => {
+        for (let i = 0; i < field.length; i++){
+            for (let j = 0; j < field.length; j++){
+                if ((field[i][0] === field[i][1] && field[i][0] === field[i][2]) && field[i][j] !== null){
+                    setIsViner((isViner) => !isViner)
+                    return true;
+                }
+                if ((field[0][j] === field[1][j] && field[0][j] === field[2][j]) && field[i][j] !== null){
+                    setIsViner((isViner) => !isViner)
+                    return true;
+                    
+                }
+                if (field[0][0] === field[1][1] && field[0][0] === field[2][2] && field[0][0] !== null){
+                    setIsViner((isViner) => !isViner)
+                    return true;
+                }
+                if ((field[2][0] === field[1][1] && field[2][0] === field[0][2]) && field[2][0] !== null){
+                    setIsViner((isViner) => !isViner)
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }, [])
 
 
     const changeClick = (rowId, colId) => {
@@ -18,26 +48,40 @@ function Game() {
 
         if (player === 1) {
             newField[rowId][colId] = 'x';
-            setField(newField)
-            setPlauer(2)
-
-            return;
+        } else {
+            newField[rowId][colId] = 'o'; 
         }
 
-        newField[rowId][colId] = 'o';
         setField(newField)
-        setPlauer(1)
+
+        if (checkIfIsWinner(newField)) return;
+
+        setPlauer((player) => player === 1 ? 2 : 1)
     }
 
-    useEffect(() => {
+    const revansh = (pl) => {
+        setIsViner(false)
+        setField(defaultField)
+
+        let newScore = score.map(supScore => ([...supScore]));
         
-    }, [field])
+        if (pl === 1){
+            newScore[0] = score[0] + 1 
+            setScore(newScore)
+        }
+        if (pl === 2){
+            newScore[1] = score[1] + 1 
+            setScore(newScore)
+        }
+
+    }
 
 
     return (
         <div className="tab">
             <div>
-                <h1>Ходит игрок {player}</h1>
+                <h1>Счет: {score[0] + ' : ' + score[1]}</h1>
+                <h1>{isViner ? 'Выиграл' : 'Ходит'} игрок {player}</h1>
             </div>
             <table className="table">
                 {field.map((subField, i) => (
@@ -55,6 +99,7 @@ function Game() {
                     </tr>
                 ))}
             </table>
+            {isViner ? <button className="btn" onClick={() => {revansh(player)}}>Играть еще</button> : ''}
         </div>
     )
 }
